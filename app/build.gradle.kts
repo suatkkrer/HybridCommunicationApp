@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.util.profile
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,18 +7,22 @@ plugins {
 
 android {
     namespace = "com.example.hybridcommunicationapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.hybridcommunicationapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        ndk {
+            // Filter for architectures supported by Flutter
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
         }
     }
 
@@ -27,6 +33,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("profile") {
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
@@ -49,6 +58,11 @@ android {
     }
 }
 
+configurations{
+    getByName("profileImplementation") {
+    }
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -56,6 +70,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
+ //   implementation project(":flutter_module")
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
@@ -66,4 +81,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation (libs.flutter.debug)
+    add("profileImplementation", "com.example.flutter_module:flutter_profile:1.0")
+    releaseImplementation (libs.flutter.release)
+
 }

@@ -2,4 +2,7 @@
 <resources>
 
     <style name="Theme.HybridCommunicationApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="MyTheme" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>
